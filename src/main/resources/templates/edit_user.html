@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/css/bootstrap.min.css"
+          rel="stylesheet" media="screen"/>
+    <meta charset="utf-8"/>
+    <title>Düzenle</title>
+</head>
+<body>
+<div align="center">
+    <h1>Saat Düzenle</h1>
+    <br/>
+    <form action="#" th:action="@{/save}" th:object="${takip}"
+          method="post">
+
+        <table border="0" cellpadding="10" class="table table-striped table-hover table-bordered">
+            <tr>
+                <td>Id</td>
+                <td>
+                    <input type="text" th:field="*{id}" readonly="readonly"/>
+                </td>
+            </tr>
+            <tr>
+                <td>Personel Id:</td>
+                <td>
+                    <input type="text" th:field="*{personelid}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>Giriş Tarihi:</td>
+                <td><input type="text" th:field="*{giristarihi}"/></td>
+            </tr>
+            <tr>
+                <td>Giriş Saati:</td>
+                <td><input type="text" th:field="*{girissaati}"/></td>
+
+            </tr>
+            <tr>
+                <td>Çıkış Tarihi:</td>
+                <td><input type="text" th:field="*{cikistarihi}"/></td>
+            </tr>
+            <tr>
+                <td>Çıkış Saati :</td>
+                <td><input type="text" th:field="*{cikissaati}"/></td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                    <a href="../">Anasayfa</a>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>
