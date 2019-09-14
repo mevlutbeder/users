@@ -1,57 +1,57 @@
 package com.users.contoller;
 
 import com.users.model.User;
-import com.users.service.UserService;
+import com.users.service.UserRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
-@Controller
+@RestController
+@RequestMapping("/api")
 public class UserController {
+
     @Autowired
-    private UserService userService;
+    private UserRepository repository;
 
-    @RequestMapping("/")
-    public String viewHomePage(Model model) {
-        List<User> userList =userService.userListAll();
-        model.addAttribute("userList",userList);
-        User user = new User();
-        model.addAttribute("user",user);
-        return "index";
+
+    @PostMapping("/addUser")
+    public String saveUser(@RequestBody User user) {
+        repository.save(user);
+        return "Added user with id : " + user.getId();
     }
 
-   /* @RequestMapping("/new")
-    public String viewShowNewUserPage (Model model){
-        User user = new User();
-        model.addAttribute("user",user);
-        return "new_user";
-    }*/
-
-    @RequestMapping(value = "/save",method = RequestMethod.POST)
-    public String saveUser (@ModelAttribute ("user") User user){
-        userService.save(user);
-        return "redirect:/";
+    @GetMapping("/findAllUsers")
+    public List<User> getUsers() {
+        return repository.findAll();
     }
 
-    @RequestMapping("/edit/{id}")
-    public ModelAndView showEditUserPage (@PathVariable (name = "id") Long id){
-        ModelAndView modelAndView = new ModelAndView("edit_user");
-        User user = userService.get(id);
-        modelAndView.addObject("user",user);
-        return modelAndView;
+    @GetMapping("/findAllUsers/{id}")
+    public Optional<User> getUser(@PathVariable ObjectId id) {
+        return repository.findById(id);
     }
 
-    @RequestMapping("/delete/{id}")
-    public String deleteUser (@PathVariable (name = "id") Long id){
-        userService.delete(id);
-        return "redirect:/";
+    @DeleteMapping("/delete/{id}")
+    public String deleteUser(@PathVariable ObjectId id) {
+        repository.deleteById(id);
+        return "user deleted with id : " + id;
+    }
+
+    @PutMapping("/updateUser/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable(value = "id") ObjectId id, @Valid @RequestBody User userDetails) {
+        User user = repository.findById(id).get();
+        if(user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        user.setName(userDetails.getName());
+        user.setLastname(userDetails.getLastname());
+        user.setPhone(userDetails.getPhone());
+        User updatedUser = repository.save(user);
+        return ResponseEntity.ok(updatedUser);
     }
 
 }
