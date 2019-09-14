@@ -1,35 +1,35 @@
 package com.users.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.users.ObjectIdDeserializer;
+import com.users.ObjectIdSerializer;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.Entity;
-
-@Entity
+@Getter
+@Setter
+@ToString
 @Document(collection = "user")
 public class User {
-    private Long Id;
+    @Id
+    @JsonSerialize(using = ObjectIdSerializer.class)
+    @JsonDeserialize(using = ObjectIdDeserializer.class)
+    private ObjectId id;
     private String name;
     private String lastname;
-    private String tel;
+    private String phone;
 
-    public User(Long id, String name, String lastname, String tel) {
-        Id = id;
-        this.name = name;
-        this.lastname = lastname;
-        this.tel = tel;
+    public ObjectId getId() {
+        return id;
     }
 
-    public User() {
-
-    }
-
-    public Long getId() {
-        return Id;
-    }
-
-    public void setId(Long id) {
-        Id = id;
+    public void setId(ObjectId id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -48,11 +48,12 @@ public class User {
         this.lastname = lastname;
     }
 
-    public String getTel() {
-        return tel;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setTel(String tel) {
-        this.tel = tel;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }
+
