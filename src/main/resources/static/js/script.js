@@ -1,5 +1,5 @@
 $(document).ready(function () {
-
+    var redirectUrl = "http://localhost:8080";
 
     toastr.options = {
         "closeButton": false,
@@ -24,9 +24,6 @@ $(document).ready(function () {
     $('#phone').inputmask("(999) 999-9999");
 
     $("#save").click(function () {
-
-
-
         var response = grecaptcha.getResponse();
         if (response.length == 0) {
             document.getElementById('g-recaptcha-error').innerHTML = '<span style="color:red;">This captcha is required.</span>';
@@ -42,15 +39,15 @@ $(document).ready(function () {
                 };
                 $.ajax({
                     type: "POST",
-                    url: "http://localhost:8080/api/addUser",
+                    url: redirectUrl + "/api/addUser",
                     data: JSON.stringify(jsonVar),
                     contentType: "application/json",
                     success: function (data) {
                         $(this).prop("disabled", true);
                         // add spinner to button
-                        if(data == "true"){
+                        if (data == "true") {
                             Command: toastr["success"]("User successfully registered.")
-                            setTimeout(function(){
+                            setTimeout(function () {
                                 location.reload();
                             }, 2000);
                         }
@@ -66,17 +63,16 @@ $(document).ready(function () {
     });
 
     $('table').on('click', 'a[id="delete"]', function (e) {
-
         var id = $(this).closest('tr').children('td:first').text();
 
         $("#deletecomfirm").click(function () {
             $.ajax({
                 type: "DELETE",
-                url: "http://localhost:8080/api/delete/" + id,
+                url: redirectUrl + "/api/delete/" + id,
                 success: function (data) {
-                    if(data == "true"){
+                    if (data == "true") {
                         Command: toastr["success"]("User successfully deleted.")
-                        setTimeout(function(){
+                        setTimeout(function () {
                             location.reload();
                         }, 2000);
                     }
@@ -85,20 +81,16 @@ $(document).ready(function () {
                     console.log(err);
                     alert(err);
                 }
-
             });
-
         });
-
     });
-
 
     function assignDataToTable() {
         $("tbody").empty();
         $.ajax({
             type: "GET",
             contentType: "application/json",
-            url: "http://localhost:8080/api/findAllUsers",
+            url: redirectUrl + "/api/findAllUsers",
             success: function (data) {
                 var users = JSON.parse(JSON.stringify(data));
                 for (var i in users) {
@@ -117,7 +109,6 @@ $(document).ready(function () {
                 console.log(data);
             }
         });
-
     }
 
     function alertUsing(text, flag) {
@@ -160,13 +151,13 @@ $(document).ready(function () {
             };
             $.ajax({
                 type: "PUT",
-                url: "http://localhost:8080/api/updateUser/" + id,
+                url: redirectUrl + "/api/updateUser/" + id,
                 data: JSON.stringify(jsonVar),
                 contentType: "application/json",
                 success: function (data) {
-                    if(!(data.length == 0)){
+                    if (!(data.length == 0)) {
                         Command: toastr["success"]("User successfully Updated.")
-                        setTimeout(function(){
+                        setTimeout(function () {
                             location.reload();
                         }, 2000);
                     }
@@ -175,13 +166,7 @@ $(document).ready(function () {
                     console.log(err);
                     alert(err);
                 }
-
             });
-
-
         });
-
     });
-
-
 });
