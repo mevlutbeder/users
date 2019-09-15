@@ -22,7 +22,7 @@ public class UserController {
     @PostMapping("/addUser")
     public String saveUser(@RequestBody User user) {
         repository.save(user);
-        return "Added user with id : " + user.getId();
+        return "true";
     }
 
     @GetMapping("/findAllUsers")
@@ -38,7 +38,7 @@ public class UserController {
     @DeleteMapping("/delete/{id}")
     public String deleteUser(@PathVariable ObjectId id) {
         repository.deleteById(id);
-        return "user deleted with id : " + id;
+        return "true";
     }
 
     @PutMapping("/updateUser/{id}")
